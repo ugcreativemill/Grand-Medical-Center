@@ -833,14 +833,15 @@ body[data-theme="dark"] .hero-trust-line span {
 .hero-slide-caption {
   position: absolute;
   left: 18px;
-  right: 18px;
+  right: auto;
   bottom: 18px;
   z-index: 1;
   display: grid;
-  gap: 6px;
-  padding: 16px 18px;
-  border-radius: 20px;
-  background: rgba(8, 18, 35, 0.56);
+  gap: 4px;
+  max-width: min(380px, calc(100% - 124px));
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: rgba(8, 18, 35, 0.44);
   border: 1px solid rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(10px);
   color: #fff;
@@ -848,13 +849,14 @@ body[data-theme="dark"] .hero-trust-line span {
 
 .hero-slide-caption strong {
   font-family: "Space Grotesk", sans-serif;
-  font-size: 1.08rem;
+  font-size: 1rem;
 }
 
 .hero-slide-caption span,
 .experience-photo-card figcaption {
   color: rgba(255, 255, 255, 0.88);
-  line-height: 1.55;
+  font-size: 0.92rem;
+  line-height: 1.45;
 }
 
 .hero-slider-dots {
@@ -1170,6 +1172,25 @@ body[data-theme="dark"] .hero-trust-line span {
   transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
 
+.service-card-media {
+  margin: -8px -8px 18px;
+  min-height: 220px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--card-glass-border);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.62),
+    0 18px 32px rgba(15, 41, 87, 0.08);
+}
+
+.service-card-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 .service-card:hover,
 .doctor-card:hover,
 .update-card:hover,
@@ -1180,6 +1201,10 @@ body[data-theme="dark"] .hero-trust-line span {
   transform: translateY(-10px);
   box-shadow: 0 24px 50px rgba(15, 41, 87, 0.14);
   border-color: rgba(39, 71, 166, 0.2);
+}
+
+.service-card:hover .service-card-media img {
+  transform: scale(1.05);
 }
 
 .intro-card:hover {
@@ -2230,14 +2255,22 @@ body[data-theme="dark"] .support-tags span {
   .hero-slide-caption,
   .experience-photo-card figcaption {
     left: 12px;
-    right: 12px;
     bottom: 12px;
+  }
+
+  .hero-slide-caption {
+    max-width: calc(100% - 86px);
+    padding: 11px 12px;
   }
 
   .hero-slider-dots {
     left: 12px;
     right: 12px;
     bottom: 12px;
+  }
+
+  .service-card-media {
+    min-height: 190px;
   }
 
   .intro-card {
