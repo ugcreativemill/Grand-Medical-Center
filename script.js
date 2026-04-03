@@ -2,7 +2,9 @@ const navToggle = document.querySelector(".nav-toggle");
 const navMenu = document.querySelector(".nav-menu");
 const yearTarget = document.querySelector("#year");
 const themeToggle = document.querySelector(".theme-toggle");
+const backToTopButton = document.querySelector(".back-to-top");
 const rootBody = document.body;
+const mobileAutoSliders = document.querySelectorAll(".mobile-auto-slider");
 
 if (yearTarget) {
   yearTarget.textContent = new Date().getFullYear();
@@ -38,12 +40,16 @@ if (themeToggle) {
 if (navToggle && navMenu) {
   navToggle.addEventListener("click", () => {
     const isOpen = navMenu.classList.toggle("is-open");
+    navToggle.classList.toggle("is-open", isOpen);
+    rootBody.classList.toggle("menu-open", isOpen);
     navToggle.setAttribute("aria-expanded", String(isOpen));
   });
 
   navMenu.querySelectorAll("a, button").forEach((item) => {
     item.addEventListener("click", () => {
       navMenu.classList.remove("is-open");
+      navToggle.classList.remove("is-open");
+      rootBody.classList.remove("menu-open");
       navToggle.setAttribute("aria-expanded", "false");
     });
   });
@@ -67,4 +73,80 @@ if ("IntersectionObserver" in window) {
   revealSections.forEach((section) => revealObserver.observe(section));
 } else {
   revealSections.forEach((section) => section.classList.add("is-visible"));
+}
+
+const updateBackToTopVisibility = () => {
+  if (!backToTopButton) {
+    return;
+  }
+
+  backToTopButton.classList.toggle("is-visible", window.scrollY > 500);
+};
+
+if (backToTopButton) {
+  backToTopButton.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  updateBackToTopVisibility();
+  window.addEventListener("scroll", updateBackToTopVisibility, { passive: true });
+}
+
+const mobileMediaQuery = window.matchMedia("(max-width: 760px)");
+const sliderTimers = new Map();
+
+const stopAutoSlider = (slider) => {
+  const timer = sliderTimers.get(slider);
+  if (timer) {
+    window.clearInterval(timer);
+    sliderTimers.delete(slider);
+  }
+};
+
+const startAutoSlider = (slider) => {
+  stopAutoSlider(slider);
+
+  if (!mobileMediaQuery.matches) {
+    slider.scrollTo({ left: 0, behavior: "smooth" });
+    return;
+  }
+
+  const step = () => {
+    const card = slider.querySelector(":scope > *");
+    if (!card) {
+      return;
+    }
+
+    const gap = 14;
+    const cardWidth = card.getBoundingClientRect().width + gap;
+    const maxScroll = slider.scrollWidth - slider.clientWidth;
+    const nextLeft = slider.scrollLeft + cardWidth;
+
+    slider.scrollTo({
+      left: nextLeft >= maxScroll - 4 ? 0 : nextLeft,
+      behavior: "smooth",
+    });
+  };
+
+  const timer = window.setInterval(step, 3200);
+  sliderTimers.set(slider, timer);
+};
+
+mobileAutoSliders.forEach((slider) => {
+  startAutoSlider(slider);
+
+  slider.addEventListener("pointerenter", () => stopAutoSlider(slider));
+  slider.addEventListener("pointerleave", () => startAutoSlider(slider));
+  slider.addEventListener("touchstart", () => stopAutoSlider(slider), { passive: true });
+  slider.addEventListener("touchend", () => startAutoSlider(slider), { passive: true });
+});
+
+const syncMobileSliders = () => {
+  mobileAutoSliders.forEach((slider) => startAutoSlider(slider));
+};
+
+if (typeof mobileMediaQuery.addEventListener === "function") {
+  mobileMediaQuery.addEventListener("change", syncMobileSliders);
+} else if (typeof mobileMediaQuery.addListener === "function") {
+  mobileMediaQuery.addListener(syncMobileSliders);
 }
