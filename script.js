@@ -5,6 +5,7 @@ const themeToggle = document.querySelector(".theme-toggle");
 const backToTopButton = document.querySelector(".back-to-top");
 const rootBody = document.body;
 const mobileAutoSliders = document.querySelectorAll(".mobile-auto-slider");
+const heroSlider = document.querySelector("[data-hero-slider]");
 
 if (yearTarget) {
   yearTarget.textContent = new Date().getFullYear();
@@ -149,4 +150,63 @@ if (typeof mobileMediaQuery.addEventListener === "function") {
   mobileMediaQuery.addEventListener("change", syncMobileSliders);
 } else if (typeof mobileMediaQuery.addListener === "function") {
   mobileMediaQuery.addListener(syncMobileSliders);
+}
+
+if (heroSlider) {
+  const heroSlides = Array.from(heroSlider.querySelectorAll(".hero-slide"));
+  const heroDots = Array.from(heroSlider.querySelectorAll(".hero-slider-dot"));
+  let activeHeroIndex = heroSlides.findIndex((slide) => slide.classList.contains("is-active"));
+  let heroTimer = null;
+
+  if (activeHeroIndex < 0) {
+    activeHeroIndex = 0;
+  }
+
+  const renderHeroSlide = (index) => {
+    heroSlides.forEach((slide, slideIndex) => {
+      slide.classList.toggle("is-active", slideIndex === index);
+    });
+
+    heroDots.forEach((dot, dotIndex) => {
+      dot.classList.toggle("is-active", dotIndex === index);
+      dot.setAttribute("aria-pressed", String(dotIndex === index));
+    });
+
+    activeHeroIndex = index;
+  };
+
+  const stopHeroSlider = () => {
+    if (heroTimer) {
+      window.clearInterval(heroTimer);
+      heroTimer = null;
+    }
+  };
+
+  const startHeroSlider = () => {
+    stopHeroSlider();
+
+    if (heroSlides.length < 2) {
+      return;
+    }
+
+    heroTimer = window.setInterval(() => {
+      const nextIndex = (activeHeroIndex + 1) % heroSlides.length;
+      renderHeroSlide(nextIndex);
+    }, 3600);
+  };
+
+  heroDots.forEach((dot, index) => {
+    dot.addEventListener("click", () => {
+      renderHeroSlide(index);
+      startHeroSlider();
+    });
+  });
+
+  heroSlider.addEventListener("pointerenter", stopHeroSlider);
+  heroSlider.addEventListener("pointerleave", startHeroSlider);
+  heroSlider.addEventListener("touchstart", stopHeroSlider, { passive: true });
+  heroSlider.addEventListener("touchend", startHeroSlider, { passive: true });
+
+  renderHeroSlide(activeHeroIndex);
+  startHeroSlider();
 }
