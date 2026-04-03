@@ -1209,7 +1209,7 @@ body[data-theme="dark"] .hero-trust-line span {
 
 .experience-panel {
   display: grid;
-  grid-template-columns: 0.74fr 1.26fr;
+  grid-template-columns: 1fr;
   gap: 28px;
   padding: 22px;
   border: 1px solid var(--line);
@@ -1279,6 +1279,7 @@ body[data-theme="dark"] .hero-trust-line span {
 
 .experience-copy {
   padding-right: 6px;
+  max-width: 860px;
 }
 
 .experience-copy h2 {
@@ -1325,6 +1326,7 @@ body[data-theme="dark"] .hero-trust-line span {
   flex-wrap: wrap;
   gap: 14px;
   align-content: start;
+  width: 100%;
 }
 
 .experience-metrics div:first-child {
