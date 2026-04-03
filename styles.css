@@ -1209,8 +1209,8 @@ body[data-theme="dark"] .hero-trust-line span {
 
 .experience-panel {
   display: grid;
-  grid-template-columns: 0.92fr 1.08fr;
-  gap: 20px;
+  grid-template-columns: 0.74fr 1.26fr;
+  gap: 28px;
   padding: 22px;
   border: 1px solid var(--line);
   border-radius: 32px;
@@ -1277,6 +1277,10 @@ body[data-theme="dark"] .hero-trust-line span {
   padding: 18px;
 }
 
+.experience-copy {
+  padding-right: 6px;
+}
+
 .experience-copy h2 {
   margin: 0;
   font-family: "Space Grotesk", sans-serif;
@@ -1330,6 +1334,7 @@ body[data-theme="dark"] .hero-trust-line span {
 .experience-metrics div:nth-child(2),
 .experience-metrics div:nth-child(3) {
   flex: 1 1 calc(50% - 7px);
+  min-width: 0;
 }
 
 .experience-metrics div {
